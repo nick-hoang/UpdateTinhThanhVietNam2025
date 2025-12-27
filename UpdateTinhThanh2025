@@ -6,31 +6,32 @@ GO
 SET QUOTED_IDENTIFIER ON
 GO
 
-CREATE TABLE [dbo].[DmTinhThanhV2](
-	[ID] [int] IDENTITY(1,1) NOT NULL,
-	[MaTinhThanh] [varchar](50) NOT NULL,
-	[TenTinhThanh] [nvarchar](250) NOT NULL,
-	[TenTiengAnh] [nvarchar](250) NULL,
-	[Cap] [nvarchar](100) NULL,
-	[VungMien] [int] NULL,
-	[MaQuocGia] [varchar](50) NULL,
- CONSTRAINT [PK_DmTinhThanhV2_1] PRIMARY KEY CLUSTERED 
-(
-	[ID] ASC
-)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY],
- CONSTRAINT [IX_DmTinhThanV2] UNIQUE NONCLUSTERED 
-(
-	[MaTinhThanh] ASC
-)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
-) ON [PRIMARY]
-GO
-
-ALTER TABLE [dbo].[DmTinhThanhV2] ADD  CONSTRAINT [DF_DmTinhThanhV2_MaQuocGia]  DEFAULT ('') FOR [MaQuocGia]
+IF NOT EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[DmTinhThanhV2]') AND type in (N'U'))
+BEGIN
+	CREATE TABLE [dbo].[DmTinhThanhV2](
+		[ID] [int] IDENTITY(1,1) NOT NULL,
+		[MaTinhThanh] [varchar](50) NOT NULL,
+		[TenTinhThanh] [nvarchar](250) NOT NULL,
+		[TenTiengAnh] [nvarchar](250) NULL,
+		[Cap] [nvarchar](100) NULL,
+		[VungMien] [int] NULL,
+		[MaQuocGia] [varchar](50) NULL,
+	 CONSTRAINT [PK_DmTinhThanhV2_1] PRIMARY KEY CLUSTERED 
+	(
+		[ID] ASC
+	)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY],
+	 CONSTRAINT [IX_DmTinhThanV2] UNIQUE NONCLUSTERED 
+	(
+		[MaTinhThanh] ASC
+	)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+	) ON [PRIMARY]	
+	ALTER TABLE [dbo].[DmTinhThanhV2] ADD  CONSTRAINT [DF_DmTinhThanhV2_MaQuocGia]  DEFAULT ('') FOR [MaQuocGia]	
+END
 GO
 
 -- Danh sách tỉnh
 INSERT INTO DmTinhThanhV2(MaTinhThanh,TenTinhThanh,TenTiengAnh,Cap,VungMien,MaQuocGia) VALUES
-('01',N'Thành phố Hà Nội',N'Ha Noi City','Thành phố Trung ương',1 ,'084'),
+('01',N'Thành phố Hà Nội',N'Ha Noi City',N'Thành phố Trung ương',1 ,'084'),
 ('04',N'Tỉnh Cao Bằng',N'Cao Bang Province',N'Tỉnh',null, '084'),
 ('08',N'Tỉnh Tuyên Quang',N'Tuyen Quang Province',N'Tỉnh',null, '084'),
 ('11',N'Tỉnh Điện Biên',N'Dien Bien Province',N'Tỉnh',null, '084'),
@@ -65,6 +66,31 @@ INSERT INTO DmTinhThanhV2(MaTinhThanh,TenTinhThanh,TenTiengAnh,Cap,VungMien,MaQu
 ('92',N'Thành phố Cần Thơ',N'Can Tho City',N'Thành phố Trung ương',null, '084'),
 ('96',N'Tỉnh Cà Mau',N'Ca Mau Province',N'Tỉnh',null, '084');
 
+IF NOT EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[DmXaPhuongV2]') AND type in (N'U'))
+BEGIN
+	CREATE TABLE [dbo].[DmXaPhuongV2] (
+		[ID] [int] IDENTITY(1,1) NOT NULL,
+		MaXa           NVARCHAR(50) NOT NULL, -- Removed PRIMARY KEY from here
+		TenXa          NVARCHAR(255) NOT NULL,            
+		TenTiengAnh    NVARCHAR(255) NULL,                
+		Cap            NVARCHAR(50) NULL,                 
+		MaTinhThanh    INT NULL,                          
+		TenTinhThanh   NVARCHAR(255) NULL,                
+    
+		-- Primary Key is defined here on [ID]
+		CONSTRAINT [PK_DmXaPhuongV2_1] PRIMARY KEY CLUSTERED 
+		(
+			[ID] ASC
+		) WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY],
+
+		-- Unique Key is defined here on [MaXa]
+		CONSTRAINT [IX_DmXaPhuongV2] UNIQUE NONCLUSTERED 
+		(
+			[MaXa] ASC
+		) WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+	) ON [PRIMARY]
+END
+GO
 
 --- Danh sách xã/ phường
 -- Hà Nội
